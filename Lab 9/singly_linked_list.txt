@@ -1,0 +1,311 @@
+/* SYSC 2006 Fall 2015 Lab 10
+   A module that implements a singly-linked list of integers. 
+ */
+
+#include <assert.h>  // assert
+#include <stdlib.h>  // malloc, free
+#include <stdbool.h>
+#include <stdio.h>   // printf
+
+#include "singly_linked_list.h"
+
+/*************************************************************
+ * Functions presented in lectures.
+ *************************************************************/
+
+/* Return a pointer to a new IntNode (a node in a singly-linked list).
+
+   Parameter value: the integer to be stored in the node.
+   Parameter next: a pointer to the node that the new node should point to.
+   This pointer should be NULL if the new node is the last node in the 
+   linked list.
+   Terminate (via assert) if memory for the node cannot be allocated.
+ */ 
+IntNode *intnode_construct(int value, IntNode *next)
+{
+    IntNode *p = malloc(sizeof(IntNode));
+    assert (p != NULL);
+    p->value = value;
+    p->next = next;
+    return p;
+}
+
+/* Print the linked list pointed to by p.
+ */
+void print_linked_list(IntNode *p)
+{
+  if (p == NULL) {
+    printf("empty list");
+    return; 
+  }
+
+  /* Print every node in the linked list except the last one,
+     using the format: value1 -> value2 -> value3 -> ...
+   */
+  for (; p->next != NULL; p = p->next) {
+    printf("%d -> ", p->value);
+  }
+
+  /* Print the last node. */
+  printf("%d", p->value);
+}
+
+/* Return true if the linked list pointed to by head contains the
+   specified value; otherwise return false.
+ */ 
+_Bool contains(IntNode *head, int value)
+{
+    IntNode *p;
+
+    for (p = head; p != NULL; p = p->next) {
+        if (value == p->value) {
+            return true;
+        }
+    }
+    return false;
+} 
+
+/* A version of contains that eliminates local variable p.
+   Make sure you understand why we don't need that variable.
+   Make sure you understand why the statement head = head->next
+   does not mangle the linked list passed to this function.
+   (Hint: draw a memory diagram showing the activation frames for
+   this function and its caller.)
+ */
+_Bool contains_shorter(IntNode *head, int value)
+{
+    for ( ; head != NULL; head = head->next) {
+        if (value == head->value) {
+            return true;
+        }
+    }
+    return false;
+} 
+
+/* Insert a node containing the specified integer value at the front 
+   of the linked list pointed to by head, and return a pointer to the 
+   first node in the modified list.
+ */
+IntNode *insert_front(IntNode *head, int value)
+{
+    return intnode_construct(value, head);
+}
+
+/* Append a node containing the specified integer value at the rear 
+   of the linked list pointed to by head, and return a pointer to the 
+   first node in the modified list.
+
+   Exercise - can we replace local variable p with parameter head?
+ */
+IntNode *append_rear(IntNode *head, int value)
+{
+    if (head == NULL) {
+        /* Appending a node to the end of an empty linked list
+         * is the same as inserting a node at the front of an 
+         * empty linked list.
+         */
+        head = intnode_construct(value, head /* NULL */); 
+    } else {
+        IntNode *p;
+
+    // Traverse the linked list until p points to the last node.
+
+        for (p = head; p->next != NULL; p = p->next) 
+        {}
+
+        p->next = intnode_construct(value, p->next /* NULL */);
+    }
+  return head;
+}
+
+/* Remove the node at the front of the linked list pointed to by head, 
+   and return a pointer to the first node in the modified list.
+   Terminate (via assert) if asked to remove a node from an empty 
+   linked list.
+ */
+IntNode *remove_first(IntNode *head)
+{
+    assert(head != NULL);
+
+  /* We need to retrieve the pointer to the second node (or NULL, if the
+     list contains one node) BEFORE we free the first node.
+     Remember, the result of accessing a node after it has been
+     freed in undefined.
+   */
+    IntNode *p = head;
+    head = head->next;
+    free(p);
+  return head;
+}
+
+/* Remove the node at the rear of the linked list pointed to by head, 
+   and return a pointer to the first node in the modified list.
+   Terminate (via assert) if asked to remove a node from an empty 
+   linked list.
+ */
+IntNode *remove_last(IntNode *head)
+{
+    assert(head != NULL);
+    
+    if (head->next == NULL) {
+        /* There is exactly one node in the linked list. */
+        free(head);
+        head = NULL;
+    } else {
+        IntNode *p1, *p2 = NULL;
+        for (p1 = head; p1->next != NULL; p1 = p1->next) {
+            p2 = p1;
+        } 
+
+        /* Now p1 points to the last node and p2 points to the node before
+         * the last node.
+         */
+        free(p1);
+        p2->next = NULL;
+    }
+  return head;
+}
+
+/*****************************************************************
+ * Solutions to Lab 9
+ *****************************************************************/
+
+// Exercise 1
+
+/* Parameter head points to the first node in a linked list, or is
+ * null if the list is empty.
+ * Count the number of nodes in the linked list that contain an integer
+ * equal to target, and return that count. 
+ * Return 0 if the linked list is empty.
+ */ 
+int count(IntNode *head, int target)
+{
+  // Check the list and return 0 if it is empty
+  if (head == NULL){
+    return 0;
+  }
+
+  // Initial the total number that have same element to the target
+  int num = 0;
+
+  // check the first node to the second last node that 
+  // check all values weather it is equal to target
+  for (; head->next != NULL; head = head->next) {
+    // Check if the value of the lls equal to the list
+    if (head->value == target){
+      // Increasing one to the total number
+      num++;
+    }
+  }
+
+  // Check the last node and add one if it equals to the target
+  if (head->value == target){
+      num++;
+  }
+
+  // return the total number of the value to equal the target
+  return num;
+} 
+
+// Exercise 2
+
+/* Parameter head points to the first node in a linked list, or is
+ * null if the list is empty.
+ * Return the index (position) of the first node that contains an 
+ * integer equal to target. The first node is at index 0, the second node
+ * is at index 1, etc.
+ * Return -1 if target is not in the linked list, or if the linked list
+ * is empty.
+ */
+int index(IntNode *head, int target)
+{
+  // Check the list and return -1 if it is empty
+  if (head == NULL){
+    return -1;
+  }
+
+  // Initial the index to 0
+  int index = 0;
+
+  // check the first node to the second last node that 
+  // check all values if the first value which is equal to target
+  // return the current position;
+  for (; head->next != NULL; head = head->next) {
+    // Check if the value of the lls equal to the list
+    if (head->value == target){
+      return index;
+    }
+    index++;
+  }
+
+
+  // Check the last node and return current index if it equals to the target
+  if (head->value == target){
+    return index;
+  }
+  // Return -1 if nothing is inside of the lls
+  return -1;
+}
+
+// Exercise 3
+
+/* Parameter head points to the first node in a linked list, or is
+ * null if the list is empty.
+ * Return the integer stored in the node at the specified index.
+ * The first node is at index 0, the second node is at index 1, etc.
+ * The function terminates (via assert) if the linked list is empty or
+ * if parameter index is invalid (negative or greater than the number
+ * of nodes in the linked list).
+ */
+int fetch(IntNode *head, int index)
+{
+
+  // Terminate the function if it is empty
+  if (head == NULL){
+    assert(head == NULL);
+  }
+
+  // Terminate the function if the index is invalid
+  if (index < 0){
+    assert(index < 0);
+  }
+  
+  // Check the first node to the second last node that 
+  // return the value which is in the given index of the lls
+  for (; head->next != NULL; head = head->next) {
+    // Check the index if equal to 0 means that you got the right poistion
+    if (index == 0){
+      // return the value of current index
+      return head->value;
+    }
+    // decreasing the index if it doesn't find the right index
+    index--;
+  }
+
+
+  // Check the last node and return current value if current index is right target
+  if (index == 0){
+    return head->value;
+  }
+
+  return -1;
+}
+
+// Exercise 4
+
+IntNode *insert(IntNode *head, int index, int x)
+{
+  // Terminate the function if it is empty
+  if (head == NULL){
+    // Return the head with the first node of x
+    // Which will be created by calling intnode_construct( , )
+    return intnode_construct(x, NULL);
+  }
+
+  // Terminate the function if the index is invalid
+  if (index < 0){
+    assert(index < 0);
+  }
+
+  return intnode_construct(0, NULL);
+}

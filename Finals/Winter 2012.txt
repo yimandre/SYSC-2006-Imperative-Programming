@@ -1,0 +1,106 @@
+Winter 2012
+Question 1
+a)
+
+double partial_sum(double a, double r, int k){
+	int i = 0;
+	double sum = 0;
+	for (i;i<=k;i++){
+		sum = sum + a*pow(r,i);
+	}
+	return sum;
+}
+
+b)
+double partial_sum_r(double a, double r, int k){
+	double sum = 0;
+	if (k < 0){
+		return 0;
+	}
+	sum = a*pow(r,k);
+	return sum + partial_sum_r(a,r,k-1);
+}
+
+Question 2
+a)
+_Bool quadratic_roots(double a, double b, double c, double *roots1, double *roots2){
+	if (a == 0){
+		return false;
+	}
+	*x = roots1;
+	*y = roots2;
+	
+	x = -b + sqrt(pow(b,2)-4*a*c) / 2*a;
+	y = -b - sqrt(pow(b,2)-4*a*c) / 2*a;
+	return true;
+}
+
+b)
+void test_quadratic_roots(double a, double b, double c){
+	printf("Calling quadratic_roots with coefficients: %d %d %d/n",a,b,c);
+	if (quadratic_roots(a,b,c,roots1,roots2) == 0){
+		printf("Return Value: False/n");
+		printf("Calculated roots: none/n");
+	}else{
+		printf("Return Value: True/n");
+		printf("Calculated roots: %d %d /n",roots1,roots2);
+}
+	
+
+Question3
+
+void sliding_average(double a[], int n, double sliding[]){
+	int i = 0;
+	sliding[i] = (annual[i] + annual[i+1]) / 2;
+	sliding[n-1] = (annual[n-1] + annual[n-2])/2;
+
+	for (i=1; i< n;i++){
+		sliding[i] = (annual[i-1]+annual[i]+annual[i+1])/3;
+	}
+}
+
+Question 5
+a)
+inventory -> item[name] = bread;
+inventory -> item[price] = 2.25;
+inventory -> item[stock_count] = 45;
+
+b) 
+IntList *product(IntList inventory){
+	IntList *p;
+	*p = product
+	product -> inventory(malloc(sizeof(int)*item);
+	inventory -> item(sizeof(3));
+
+	inventory -> item[name] = pie;
+	inventory -> item[price] = 9.50;
+	inventory -> item[stock_count] = 7;
+}
+
+Question 6
+a)
+
+void increase_capacity(IntList *p, int new_capacity){
+	assert(p! = NULL);
+	assert(new_capacity >= list->capacity);
+	int ptr;
+	ptr = malloc(sizeof(int)*new_capacity);
+	for (int i = 0; i < list->size; i++){
+		ptr[i] = list->elems[i];
+	}
+	free(list->capacity);
+	list -> capacity = new_capacity;
+}
+
+b)
+_Bool intlist_append(Intlist *p, int element){
+	assert(p!=NULL);
+	if (list->capacity == list ->size){
+		increase_capacity(p, capacity*2);
+	}
+	list -> elems[list->size] = element;
+	list -> size++;
+	return true;
+}
+	
+	

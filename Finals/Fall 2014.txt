@@ -1,0 +1,96 @@
+Fall 2014 Final Exam
+
+Question 1
+a)
+term = (sqrt(pow(3,n))-1) / (pow(n,2) +5);
+
+b)
+double sum = 0;
+for (n; n<=k;n++){
+	sum = sum + 1/(n);
+}
+return sum;
+
+c)
+double maclaurin(double x, double k){
+	assert (x  <= -1 || x > 1);
+	assert (k <=0);
+	
+	int i = 1;
+	double sum = 0;
+	for (i; i<=k; i++){
+		sum = sum + pow(x,n)*(pow(-1,n+1)/n);
+	}
+	return sum;
+}
+
+d)
+void test_maclaurin(double x, int k, double expected_results){
+	printf("Calling maclaurin, parameter x: %d, parameter k: %d \n",x,k);
+	printf("Expected sum: %d\n", expected_results);
+	printf(:Actual sum: %d \n", maclaurin(x,k);
+}
+
+Question 2
+a)
+_Bool either_24(int arr[], int n){
+	int i = 1;
+	for (i; i<n ; i++){
+		if(arr[i] == 2 && arr[i+1] || arr[i] ==4 && arr[i+1] ==4){
+			return true;
+		}
+	}
+	return false;
+}
+
+b)
+int *series_up(int n){
+	int arr[n(n+1)/2];
+	int i = 0;
+	
+	for(i; i<(n(n+1)/2;i++){
+		for(int j=1;j<n;j++){
+			arr[i] = j;
+		}
+	}
+	return arr;
+}
+
+Question 4
+a)
+IntNode *interleave_lists(IntNode *head_1, IntNode *head_2){
+	if(head_1 == NULL){
+		return head_2;
+	}
+	if (head_2 == NULL);
+		return head_1;
+	}
+	
+	*x = head_1;
+	*y = head_2;
+	
+	int *temp
+	while(x && y){
+		temp = x->next;
+		x ->next = y;
+		y = temp;
+		x = x->next;
+	}
+
+	return head_1;
+
+}
+
+b)
+IntNode *remove(IntNode *head,int value){
+	assert(head != NULL);
+	IntNode *p = head;
+	for (p; p!= NULL; p->next){
+		if(p->value == value){
+			free(p);
+		}
+	}
+	return head;
+}
+	
+	
